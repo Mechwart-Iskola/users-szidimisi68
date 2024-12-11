@@ -1,14 +1,27 @@
-
+// src/App.tsx
+import React, { useEffect, useState } from "react";
+import { User } from "./types";
 import UserCard from "./usercard/Usercard";
-import "./app.css";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    fetch("/users.json")
+      .then((response) => response.json())
+      .then((data) => setUsers(data.users))
+      .catch((err) => console.error("Error fetching users:", err));
+  }, []);
+
   return (
-    <div>
-      <h1>User Information</h1>
-      <UserCard />
+    <div className="App">
+      <h1>User Search</h1>
+      
+      {/* Render UserCard, no need to pass key here */}
+      {users.length > 0 && <UserCard users={users} />}
     </div>
   );
-}
+};
 
 export default App;
